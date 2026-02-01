@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¿Quieres ser mi Valentine? 💕</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: float 8s infinite linear;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(110vh) translateX(0) rotate(0deg); }
+      100% { transform: translateY(-20vh) translateX(30vw) rotate(720deg); }
+    }
+
+    .container {
+      z-index: 10;
+      padding: 20px;
+      max-width: 90%;
+    }
+
+    h1 {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px rgba(255, 50, 100, 0.9);
+      animation: beat 1.8s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .subtitle {
+      font-size: 2.2rem;
+      margin: 2rem 0 3rem;
+      text-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    button {
+      font-size: 2rem;
+      padding: 1.2rem 4rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+
+    .yes {
+      background: #ff3366;
+      color: white;
+    }
+
+    .yes:hover {
+      background: #e61e50;
+      transform: scale(1.12);
+    }
+
+    .no {
+      background: #6b7280;
+      color: white;
+      position: absolute;
+      transition: all 0.15s ease;
+    }
+
+    .no:hover {
+      background: #4b5563;
+    }
+
+    #message {
+      margin-top: 3rem;
+      font-size: 3rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 1.2s, transform 1s;
+      text-shadow: 0 0 25px rgba(255,255,255,0.9);
+    }
+
+    .celebration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="container">
+    <h1>💖 ¿Quieres ser mi Valentine? 💖</h1>
+    <p class="subtitle">Dime que sí, porfi... 🥺❤️</p>
+
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">SÍ 😍</button>
+      <button class="no" id="noBtn">NO 😔</button>
+    </div>
+
+    <div id="message"></div>
+  </div>
+
+  <div class="celebration" id="celebrate">🎉💕</div>
+
+  <script>
+    // Corazones flotando
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = ["❤️", "💗", "💖", "💘", "💝"][Math.floor(Math.random()*5)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 5 + 6) + "s";
+      heart.style.fontSize = (Math.random() * 2 + 1.5) + "rem";
+      document.getElementById("hearts").appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+    setInterval(createHeart, 350);
+
+    // Botón SÍ
+    function sayYes() {
+      document.getElementById("message").innerHTML = "¡SÍIIII! 🥰💕<br>¡Eres lo mejor del mundo!";
+      document.getElementById("message").style.opacity = "1";
+      document.getElementById("message").style.transform = "scale(1.1)";
+      document.body.style.background = "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)";
+
+      // Celebración
+      const celeb = document.getElementById("celebrate");
+      celeb.style.opacity = "1";
+      setTimeout(() => { celeb.style.opacity = "0"; }, 4000);
+
+      // Más corazones rápidos
+      for(let i = 0; i < 30; i++) {
+        setTimeout(createHeart, i * 80);
+      }
+    }
+
+    // Botón NO que huye del cursor
+    const noBtn = document.getElementById("noBtn");
+    let fleeing = false;
+
+    noBtn.addEventListener("mouseover", (e) => {
+      if (fleeing) return;
+      fleeing = true;
+
+      const rect = noBtn.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = centerX - mouseX;
+      const dy = centerY - mouseY;
+      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+
+      // Dirección opuesta al cursor + un poco random
+      const moveX = (dx / dist) * (180 + Math.random()*80);
+      const moveY = (dy / dist) * (180 + Math.random()*80);
+
+      noBtn.style.left = (rect.left + moveX) + "px";
+      noBtn.style.top  = (rect.top  + moveY)  + "px";
+      noBtn.style.position = "fixed";
+
+      setTimeout(() => { fleeing = false; }, 300);
+    });
+
+    // Para que no se escape fuera de pantalla fácilmente
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      if (rect.right < 0 || rect.left > window.innerWidth ||
+          rect.bottom < 0 || rect.top > window.innerHeight) {
+        noBtn.style.left = (window.innerWidth / 2 - 80) + "px";
+        noBtn.style.top  = (window.innerHeight / 2 + 100) + "px";
+      }
+    });
+  </script>
+
+</body>
+</html>
