@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Romina… ¿Quieres ser mi San Valentín? 💕</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background-hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 2.2rem;
+      animation: floatHeart 18s infinite linear;
+      opacity: 0.6;
+      color: #ff6b81;
+    }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(110vh) translateX(0) rotate(0deg); }
+      100% { transform: translateY(-20vh) translateX(40vw) rotate(1440deg); }
+    }
+
+    .content {
+      z-index: 10;
+      padding: 2rem;
+      max-width: 90%;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      color: #e84393;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 20px rgba(232,67,147,0.3);
+    }
+
+    .pregunta {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: #666;
+      margin: 2rem 0 4rem;
+      font-style: italic;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: clamp(4rem, 12vw, 12rem); /* ¡Aquí está el espacio grande entre SÍ y NO! */
+      width: 100%;
+      max-width: 1000px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      padding: 1.2rem 5rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      min-width: 220px;
+    }
+
+    .btn-si {
+      background: linear-gradient(45deg, #ff6b81, #ff4757);
+      color: white;
+    }
+
+    .btn-si:hover {
+      transform: translateY(-6px) scale(1.08);
+      box-shadow: 0 15px 40px rgba(255,71,87,0.5);
+    }
+
+    .btn-no {
+      background: linear-gradient(45deg, #a4b0be, #747d8c);
+      color: white;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    .btn-no:hover {
+      background: #57606f;
+      transform: translateY(-4px);
+    }
+
+    @media (max-width: 600px) {
+      .buttons {
+        flex-direction: column;
+        gap: 3rem;
+      }
+      .btn-no {
+        position: static; /* En celular no huye tanto para no ser frustrante */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background-hearts" id="hearts"></div>
+
+  <div class="content">
+    <h1>💞 Romina… 💞</h1>
+    <p class="pregunta">¿Quieres ser mi San Valentín?</p>
+
+    <div class="buttons">
+      <a href="si.html" class="btn btn-si">¡SÍ, OBVIO! 😍❤️</a>
+      <button class="btn btn-no" id="noBtn">No… 😔</button>
+    </div>
+  </div>
+
+  <script>
+    // Corazones flotando
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = ['❤️','💗','💖','💕','🌸'][Math.floor(Math.random()*5)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 10 + 12) + 's';
+      heart.style.fontSize = (Math.random() * 1.5 + 1.8) + 'rem';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 20000);
+    }
+
+    setInterval(createHeart, 600);
+
+    // Botón NO que huye (suave)
+    const noBtn = document.getElementById('noBtn');
+
+    noBtn.addEventListener('mouseover', (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width/2;
+      const y = e.clientY - rect.top - rect.height/2;
+
+      let moveX = -x * 2.5 + (Math.random() * 60 - 30);
+      let moveY = -y * 2.5 + (Math.random() * 60 - 30);
+
+      let newLeft = rect.left + moveX;
+      let newTop = rect.top + moveY;
+
+      newLeft = Math.max(20, Math.min(window.innerWidth - rect.width - 20, newLeft));
+      newTop = Math.max(20, Math.min(window.innerHeight - rect.height - 20, newTop));
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = newLeft + 'px';
+      noBtn.style.top = newTop + 'px';
+    });
+  </script>
+
+</body>
+</html>

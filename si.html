@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¡SÍ ROMINA! 💖🥰</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9aa2, #ffb7b2, #ffd3b6);
+      color: white;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: clamp(4.5rem, 12vw, 9rem);
+      margin: 0;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      animation: beat 2s infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    p {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      margin: 2rem 0;
+      max-width: 90%;
+    }
+
+    .corazones {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="corazones" id="corazones"></div>
+
+  <div>
+    <h1>¡SÍIIII ROMINA!</h1>
+  </div>
+
+  <script>
+    function createBigHeart() {
+      const h = document.createElement('div');
+      h.style.position = 'absolute';
+      h.style.left = '50%';
+      h.style.top = '50%';
+      h.style.fontSize = (Math.random() * 4 + 4) + 'rem';
+      h.style.transform = 'translate(-50%, -50%)';
+      h.style.opacity = 0.9;
+      h.style.pointerEvents = 'none';
+      h.style.animation = 'explodeHeart 2.5s ease-out forwards';
+      h.innerHTML = '❤️';
+      document.getElementById('corazones').appendChild(h);
+      setTimeout(() => h.remove(), 3000);
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes explodeHeart {
+        0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity:1; }
+        50% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity:0.9; }
+        100% { transform: translate(-50%, -120vh) scale(1.2) rotate(720deg); opacity:0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    setInterval(createBigHeart, 800);
+    // Primera explosión inmediata
+    for(let i = 0; i < 8; i++) setTimeout(createBigHeart, i * 200);
+  </script>
+
+</body>
+</html>
